@@ -35,11 +35,30 @@ class Contenedor {
             res.send({ mensaje: archivoEnJson})
          })
     }
+    
+   
+
+    obtenerDatosRandom(random){
+       const archivos = fs.readFileSync(this.nombreArchivo, "utf-8")
+       const archivoEnJson = JSON.parse(archivos)
+       
+       archivoEnJson.forEach(elemento => {
+        if(elemento.id = random){
+        app.get('/productosRandom', (req, res) => {
+                res.send({ mensaje: elemento})
+             })
+    }else { console.log("algo paso")}
+    })
+       
+   }
 
 }
+
 const objeto2 = new Contenedor ("productos")
 objeto2.obtenerDatos()
+const random = Math.ceil(Math.random()*3);
 
+objeto2.obtenerDatosRandom(random)
  
 
 

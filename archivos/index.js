@@ -85,7 +85,7 @@ server.on("error", error => console.log(`Error en servidor ${error}`))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 //defino lugar donde se van a poder ver los archivos 
-app.use('/static', express.static(__dirname + '/public'));
+app.use('/public', express.static(__dirname + '/public'));
 //un middleware de prueba
 
 app.use(function (req, res, next) {
@@ -154,6 +154,14 @@ class Products {
     return undefined;
   }
 
+  deleteOne(id){
+    const encontrarProducto = this.findOne(id);
+    if(encontrarProducto){
+      this.products = this.products.filter((item)=> item.id != id)
+      return id;
+    }
+    return undefined;
+  }
 }
 
 
@@ -215,10 +223,19 @@ router.get('/:id', (req, res) => {
 
   //DELETE CON ID 
   router.delete('/:id', (req, res) => {
-    const { id } = req.params;  
-    
-    const productsFilteredById = productos.filter((item)=> item.id != id)
-    res.json("hola mundo")
+    //debe ser let para introducir el cambio
+    let { id } = req.params;  
+    const products = new Products(productos)
+    id = parseInt(id);
+
+
+    const deleteProduct = products.deleteOne(id);
+
+    if (deleteProduct != undefined){
+      res.json({sucess: "ok", id })
+    }else{
+    res.json({error: "producto no encontrado"})  
+    }
   });
 
 
